@@ -1,3 +1,9 @@
+ # Changes on this fork:
+- Adapt to work on STLINK V2
+- Simplified UI
+- Directly accessible from [here](https://candas1.github.io/jstlink/) (Stlink driver should be installed)
+
+
 # jstlink
 STLink V3/V2 library using WebUSB
 
