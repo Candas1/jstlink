@@ -5,7 +5,7 @@
 import { STATUS, PRODUCTS, VENDORS, errorString } from "./stLinkConst.js";
 
 // https://github.com/visionmedia/debug
-// localStorage.debug = 'stlink:*'
+localStorage.debug = 'stlink:*'
 const logger = debug("stlink:drv");
 
 let device = null;
@@ -33,8 +33,7 @@ const request = async () => {
             vendorId: parseInt(Object.keys(VENDORS)[0], 16), productId: parseInt(key, 16)
         });
     }
-    device = await navigator.usb.requestDevice();
-    //device = await navigator.usb.requestDevice({ filters: filter });
+    device = await navigator.usb.requestDevice({ filters: filter });
     return { result: STATUS.OK };
 };
 
@@ -67,7 +66,11 @@ const sendCommand = async (req) => {
 
     // write command
     if (req.cmd_length) {
-        await device.transferOut(req.ep_out, req.cmd);
+        let result = await device.transferOut(req.ep_out, req.cmd);
+        if (result.status === 'stall') {
+            console.warn('Endpoint stalled. Clearing.');
+            await device.clearHalt('out', req.ep_out);
+        }
     }
 
     // Optional data out phase.
@@ -78,13 +81,18 @@ const sendCommand = async (req) => {
     // Optional data in phase.
     if (req.in_length) {
         let result = await device.transferIn(req.ep_in, req.in_length);
-        if (result.data && result.data.byteLength === req.in_length) {
-            if (req.in_length_ex)
-                req.in = new DataView(result.data.buffer.slice(0, req.in_length_ex));
-            else
-                req.in = new DataView(result.data.buffer.slice(0));
-        } else {
-            throw new STLinkException(`Error, only ${result.bytesWritten} Bytes was received to STLink instead of expected ${req.in_length}`);
+        if (result.status === 'stall') {
+            console.warn('Endpoint stalled. Clearing.');
+            await device.clearHalt('in', req.ep_in);
+        }else{
+            if (result.data && result.data.byteLength === req.in_length) {
+                if (req.in_length_ex)
+                    req.in = new DataView(result.data.buffer.slice(0, req.in_length_ex));
+                else
+                    req.in = new DataView(result.data.buffer.slice(0));
+            } else {
+                throw new STLinkException(`Error, only ${result.bytesWritten} Bytes was received to STLink instead of expected ${req.in_length}`);
+            }
         }
     }
 };

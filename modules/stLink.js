@@ -37,6 +37,7 @@ const defs = {
     JTAG_ENTER2: 0x30, // to enter JTAG/SWD with new API
     JTAG_ENTER_SWD: 0xa3,
     JTAG_ENTER_JTAG_NO_CORE_RESET: 0xa4,
+    JTAG_RESET: 0x32,
     JTAG_AP_NO_CORE: 0,
     JTAG_AP_CORTEXM_CORE: 1,
     JTAG_EXIT: 0x21,
@@ -327,6 +328,24 @@ const enterSWD = async () => {
         throw new STLinkException("enterSWD error", JTAGstatus);
     }
 };
+
+/**
+ * Enter SWD mode for given device.
+ *
+ * @param {object} deviceDesc - Device descriptor.
+ * @param {string} typeConnect - The connection protocol either p2p or tcp.
+ * @returns {number} - Result of the commands.
+ */
+const reset = async () => {
+
+    let req = new TDeviceRequest();
+    req.cmd_length = 2;
+    req.cmd_ui8arr[0] = defs.CMD_JTAG;
+    req.cmd_ui8arr[1] = defs.RESET;
+
+    await sendCommand(req);
+};
+
 
 /**
  * Exit JTAG mode for given device.
@@ -1156,7 +1175,7 @@ export { getVersion, getCurrentMode, modeString, exitDFUMode };
 
 // JTAG interface
 export { initAccessPoint, closeAccessPoint };
-export { enterJTAG, enterSWD, exitJTAG, JTAG_ReadIdCodes, getSTM32MCUString };
+export { enterJTAG, enterSWD, reset, exitJTAG, JTAG_ReadIdCodes, getSTM32MCUString };
 export { getJTAGFrequencies, getSWDFrequencies, v3getSWDFrequencies, v3getJTAGFrequencies };
 export { JTAG_SetJTAGFrequency, JTAG_SetSWDFrequency, JTAG_SetComFrequency, JTAG_GetComFrequency };
 export { JTAG_ReadMemory32Bit, JTAG_ReadMemory16Bit, JTAG_ReadMemory8Bit };

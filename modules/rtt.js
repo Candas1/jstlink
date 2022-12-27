@@ -31,6 +31,7 @@ const find = async (options) => {
     status.RAM.address = options.address || 0x20000000;
     status.RAM.size = options.size || 0x4000;
 
+    await STLink.exitDFUMode();
     await STLink.enterSWD();
     status.mcuid = await STLink.JTAG_ReadIdCodes();
 

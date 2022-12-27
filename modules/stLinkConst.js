@@ -3,8 +3,8 @@
  */
 
 const CONST = {
-    DRV_REQUEST_WRITE: 0X1, //Through EP2OUT (WARNING: for V2 was 0x02)
-    DRV_REQUEST_READ_EP3: 0X2, //Through EP3IN (SWV) (WARNING: for V2 was 0x03)
+    DRV_REQUEST_WRITE: 0X02, //Through EP2OUT (WARNING: for V2 was 0x02)
+    DRV_REQUEST_READ_EP3: 0X03, //Through EP3IN (SWV) (WARNING: for V2 was 0x03)
     DRV_REQUEST_READ_EP1: 0x1, // Through EP1IN
 };
 
@@ -255,7 +255,7 @@ class TDeviceRequest {
 
 const PRODUCTS = {
     // "3744": "ST-Link v1",
-    // "3748": "ST-Link v2",
+    "3748": "ST-Link v2",
     "374A": "ST-Link v2-1A",
     "374B": "ST-Link v2-1B",
     "374E": "ST-Link v3-E",

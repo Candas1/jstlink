@@ -17,9 +17,7 @@ const rttWriteArr = [];
 
 // elements
 const btnConnect = document.getElementById("open-stlink");
-const btnRTTstart = document.getElementById("start-rtt");
-const btnRTTstop = document.getElementById("stop-rtt");
-const btnEcho = document.getElementById("echo-sw");
+const btnRTT = document.getElementById("rtt");
 const elUSBinfo = document.getElementById("info-usb");
 const elCPUinfo = document.getElementById("info-cpu");
 const elTick = document.getElementById("info-tick").firstElementChild;
@@ -39,11 +37,6 @@ const resize = () => {
 
 const initUI = () => {
 
-    // init echo based on save value
-    if ((localStorage.echo === "Echo ON") && echoOFF) {
-        btnEcho.onclick();
-    }
-
     resize();
     updateUI();
     
@@ -57,9 +50,7 @@ const updateUI = async () => {
 
     // buttons
     btnConnect.disabled = isOpened;
-    btnRTTstart.disabled = !isOpened;
-    btnRTTstop.disabled = !isOpened;
-    btnEcho.disabled = !isOpened;
+    btnRTT.disabled = !isOpened;
 
     // USB info
     if (devices.length) {
@@ -80,10 +71,13 @@ const updateUI = async () => {
 const runRTT = async () => {
 
     if (rttRunning) {
+        rttRunning = false;
+        btnRTT.innerText = "Stop RTT";
         return;
     }
     
     rttRunning = true;
+    btnRTT.innerText = "Start RTT";
 
     await rtt.find();
     updateUI();
@@ -116,12 +110,6 @@ const rttTick = () => {
     document.elTick.children[1].setAttributeNS(null, "fill", "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, "0"));
 };
 
-const echoOFF = () => {
-    return btnEcho.innerText === "Echo OFF";
-};
-
-// let know terminal about echo settings
-terminal.setEcho(echoOFF);
 
 ///////////////////////////////////////////////////////////////////////////////
 // EVENTS
@@ -140,18 +128,4 @@ btnConnect.onclick = async () => {
     updateUI();
 };
 
-btnRTTstart.onclick = runRTT;
-btnRTTstop.onclick = () => rttRunning = false;
-
-btnEcho.onclick = () => {
-    if (echoOFF()) {
-        btnEcho.innerText = "Echo ON";
-    } else {
-        btnEcho.innerText = "Echo OFF";
-    }
-    localStorage.echo = btnEcho.innerText;
-};
-
-terminal.addEventListener("key", async (ev) => {
-    rttWriteArr.push(ev.detail.ascii);
-});
+btnRTT.onclick = runRTT;
