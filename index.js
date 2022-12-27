@@ -3,8 +3,8 @@
  */
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
-import * as rtt from "../modules/rtt.js";
-import { Terminal } from "../modules/terminal.js";
+import * as rtt from "./modules/rtt.js";
+import { Terminal } from "./modules/terminal.js";
 rtt.init();
 
 const logger = debug("stlink:index");
