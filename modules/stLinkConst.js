@@ -167,6 +167,7 @@ const MODES = {
 
 const STM32MCU = {
     0x000: "STM32",
+    0x242: "AT32F403xxx",
     0x410: "STM32F10xxx",
     0x411: "STM32F2xxxx",
     0x412: "STM32F10xxx",
