@@ -72,12 +72,12 @@ const runRTT = async () => {
 
     if (rttRunning) {
         rttRunning = false;
-        btnRTT.innerText = "Stop RTT";
+        btnRTT.innerText = "Start RTT";
         return;
     }
     
     rttRunning = true;
-    btnRTT.innerText = "Start RTT";
+    btnRTT.innerText = "Stop RTT";
 
     await rtt.find();
     updateUI();
