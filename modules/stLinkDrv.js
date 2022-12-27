@@ -33,7 +33,8 @@ const request = async () => {
             vendorId: parseInt(Object.keys(VENDORS)[0], 16), productId: parseInt(key, 16)
         });
     }
-    device = await navigator.usb.requestDevice({ filters: filter });
+    device = await navigator.usb.requestDevice();
+    //device = await navigator.usb.requestDevice({ filters: filter });
     return { result: STATUS.OK };
 };
 
