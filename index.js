@@ -51,6 +51,10 @@ const updateUI = async () => {
     // buttons
     btnConnect.disabled = isOpened;
     btnRTT.disabled = !isOpened;
+    if (!isOpened){
+       btnRTT.innerText = "Start RTT";
+       rttRunning = false;
+    }
 
     // USB info
     if (devices.length) {
