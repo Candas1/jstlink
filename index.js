@@ -80,11 +80,15 @@ const runRTT = async () => {
         return;
     }
     
-    rttRunning = true;
-    btnRTT.innerText = "Stop RTT";
-
-    await rtt.find();
-    updateUI();
+    try{
+      await rtt.find();
+      rttRunning = true;
+      btnRTT.innerText = "Stop RTT";
+      updateUI();
+    }catch(e){
+      console.log(e); 
+    }
+    
 
     if (rtt.status.aUp.length == 0 || rtt.status.aDown.length == 0) {
         logger("RTT not found");
@@ -98,14 +102,18 @@ const runRTT = async () => {
     terminal.writeln(` size out ${rtt.status.aDown[0].SizeOfBuffer}`);
 
     while (rttRunning) {
-        let rttbuff = await rtt.read();
-        rttTick();
-        if (rttbuff.length) {
+        try{
+          let rttbuff = await rtt.read();
+          rttTick();
+          if (rttbuff.length) {
             logger("rtt: ", rttbuff);
             terminal.write(rttbuff);
-        }
-        if (rttWriteArr.length) {
+          }
+          if (rttWriteArr.length) {
             await rtt.write(rttWriteArr);
+          }
+        }catch(e){
+        console.log(e); 
         }
     }
 };
