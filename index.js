@@ -113,7 +113,13 @@ const runRTT = async () => {
             await rtt.write(rttWriteArr);
           }
         }catch(e){
-        console.log(e); 
+          console.log(e);
+          // If error is thrown, it could be the target was disconnected/restarted, find the rtt block again
+          try{
+            await rtt.find();
+          }catch(e){
+            console.log(e); 
+          }
         }
     }
 };
