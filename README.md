@@ -3,6 +3,9 @@
 - Simplified UI
 - Directly accessible from [here](https://candas1.github.io/jstlink/) (Stlink driver should be installed)
 
+Make sure you have a recent firmware on your STLINK V2.<br>
+[WebUSB](https://github.com/WICG/webusb) is available in Chrome 61 for Android, Chrome OS, Linux, macOS and Windows.
+
 
 # jstlink
 STLink V3/V2 library using WebUSB
