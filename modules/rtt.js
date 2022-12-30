@@ -267,4 +267,4 @@ const ASCIIecoderDV = (buffView) => {
 };
 
 export { find, open, read, write, init, getMCUstring, status };
-export { isOpened } from "./stLinkDrv.js";
+export { isOpened, close} from "./stLinkDrv.js";

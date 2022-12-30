@@ -49,11 +49,13 @@ const updateUI = async () => {
     let devices = await navigator.usb.getDevices();
 
     // buttons
-    btnConnect.disabled = isOpened;
     btnRTT.disabled = !isOpened;
     if (!isOpened){
        btnRTT.innerText = "Start RTT";
+       btnConnect.innerText = "Open STLINK"
        rttRunning = false;
+    }else{
+      btnConnect.innerText = "Close STLINK"
     }
 
     // USB info
@@ -142,7 +144,18 @@ window.addEventListener("load", initUI);
 
 // click on open STLINK
 btnConnect.onclick = async () => {
-    await rtt.open();
+    if (rtt.isOpened()){
+      // Stop RTT
+      if (rttRunning) runRTT();
+      // Close device
+      await rtt.close();
+    }else{
+      try{
+        await rtt.open();
+      }catch(e){
+        console.log(e);
+      }
+    }
     updateUI();
 };
 
