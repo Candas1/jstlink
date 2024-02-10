@@ -159,4 +159,8 @@ btnConnect.onclick = async () => {
     updateUI();
 };
 
+terminal.addEventListener("key", async (ev) => {
+    rttWriteArr.push(ev.detail.ascii);
+});
+
 btnRTT.onclick = runRTT;
